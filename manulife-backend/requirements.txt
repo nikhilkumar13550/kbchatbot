@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+requests
+azure-identity
+urllib3
+pydantic
