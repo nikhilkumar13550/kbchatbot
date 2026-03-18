@@ -24,6 +24,10 @@ pip install -r requirements.txt
 python main.py
 
 
+npm config set strict-ssl false
+npm install react-markdown --registry=https://registry.npmjs.org/
+npm run dev
+
 
 
 # Install dependencies
