@@ -1,0 +1,83 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+import requests
+import uuid
+import urllib3
+from datetime import datetime, timezone
+
+# 1. Disable SSL warnings for the corporate proxy bypass
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# 2. Ajay's exact endpoint and API Key for the POC
+FOUNDRY_ENDPOINT = "https://Claims-Intake.services.ai.azure.com/api/projects/firstProject/applications/KbChatBot/protocols/activityprotocol?api-version=2025-11-15-preview"
+FOUNDRY_API_KEY = "5isBJe3D4tp5LnAxETw16SaeUTzB4mBNWfTh1KMSgjWjzmrWHsAdJQQJ99BKACYeBjFXJ3w3AAAAACOGBiYx"
+
+class ChatRequest(BaseModel):
+    query: str
+    userId: str = "manulife_ops_user"
+
+@app.post("/api/chat")
+def chat_endpoint(request: ChatRequest):
+    try:
+        # 3. Use the API Key in the headers instead of the Entra ID Bearer token
+        headers = {
+            "Content-Type": "application/json",
+            "api-key": FOUNDRY_API_KEY
+        }
+
+        # 4. expectReplies tells Azure to wait and send the KB answer back in the same HTTP request
+        payload = {
+            "type": "message",
+            "id": str(uuid.uuid4()),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "channelId": "directline",
+            "conversation": {"id": f"conv_{request.userId}"},
+            "from": {"id": request.userId, "name": "User"},
+            "text": request.query,
+            "deliveryMode": "expectReplies" 
+        }
+
+        print(f"Sending to Azure: '{request.query}' ...")
+        
+        response = requests.post(FOUNDRY_ENDPOINT, headers=headers, json=payload, verify=False)
+        
+        if response.status_code not in [200, 201, 202]:
+            print(f"AZURE ERROR {response.status_code}: {response.text}")
+            return {"answer": f"⚠️ Azure Error {response.status_code}. Check Python terminal."}
+
+        if not response.text.strip():
+             return {"answer": "⚠️ Azure is processing the documents. Please ask the question again in a few seconds."}
+
+        data = response.json()
+        
+        # 5. Extract the bot's text from the activities array
+        activities = data.get("activities", [])
+        bot_replies = [act for act in activities if act.get("type") == "message" and act.get("from", {}).get("id") != request.userId]
+        
+        if bot_replies:
+            return {"answer": bot_replies[-1].get("text", "Received blank text from Knowledge Base.")}
+            
+        if "error" in data:
+             error_msg = data["error"].get("message", "Unknown Azure logic error")
+             return {"answer": f"⚠️ Azure Bot Error: {error_msg}"}
+            
+        return {"answer": "The bot processed the query but hasn't finished reading the documents yet."}
+
+    except Exception as e:
+        print(f"Python Error: {e}")
+        return {"answer": f"⚠️ Python connection error: {str(e)}"}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
