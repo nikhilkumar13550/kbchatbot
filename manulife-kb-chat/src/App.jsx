@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Search, Globe, Send, User, Bot, HelpCircle } from 'lucide-react';
+import ReactMarkdown from 'react-markdown'; // <-- 1. Added Markdown Import
 import './App.css';
 
 export default function App() {
   const [messages, setMessages] = useState([
     { 
       id: 1, 
-      text: "Hello, Nikhil. Welcome to the Customer Operation Resource Assistant. Please enter your query or specify the SOP you need assistance with today.", 
+      text: "Hello, welcome to the Advisor Operations Assistant. I can help you with operational processes such as advisor transfers, coverage updates, legal deductions, and deceased case handling. Please enter your query to get step-by-step guidance.", 
       sender: "bot" 
     }
   ]);
@@ -75,7 +76,7 @@ export default function App() {
         <div className="chat-container">
           <div className="chat-header-internal">
             <HelpCircle size={24} color="#007A33" />
-            <h2>Customer Operation Resource Assistant</h2>
+            <h2>Operations Process Assistant (Transfers, Legal deductions, Deceased handling)</h2>
           </div>
           
           <div className="messages-area">
@@ -84,7 +85,16 @@ export default function App() {
                 <div className={`avatar ${msg.sender === 'bot' ? 'bot-avatar' : 'user-avatar'}`}>
                   {msg.sender === 'bot' ? <Bot size={20} color="white" /> : <User size={20} color="#4B5563" />}
                 </div>
-                <div className="message-bubble">{msg.text}</div>
+                
+                {/* 2. Markdown Wrapper added below */}
+                <div className="message-bubble">
+                  {msg.sender === 'bot' ? (
+                    <ReactMarkdown>{msg.text}</ReactMarkdown>
+                  ) : (
+                    msg.text
+                  )}
+                </div>
+
               </div>
             ))}
             <div ref={messagesEndRef} />
