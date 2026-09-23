@@ -1,16 +1,171 @@
 {
 INPUTS: {
-input: "<?xml version="1.0" encoding="UTF-8" standalone="yes"?><lookupResults xmlns="http://www.dsttechnologies.com/awd/rest/v1" xmlns:xs="http://www.w3.org/2001/XMLSchema" total="2"><instance workSelected="false" important="false" id="2026-09-23-03.36.02.705840T01" recordType="transaction"><link rel="children" href="awdServer/awd/services/v1/instances/2026-09-23-03.36.02.705840T01/children" type="application/vnd.dsttechnologies.awd+xml"/><link rel="fieldvalues" href="awdServer/awd/services/v1/instances/2026-09-23-03.36.02.705840T01/fieldvalues" type="application/vnd.dsttechnologies.awd+xml"/><link rel="form" href="awdServer/awd/services/v1/instances/2026-09-23-03.36.02.705840T01/form" type="application/vnd.dsttechnologies.awd+xml"/><link rel="history" href="awdServer/awd/services/v1/instances/2026-09-23-03.36.02.705840T01/history" type="application/vnd.dsttechnologies.awd+xml"/><link rel="presentation summary" href="awdServer/awd/services/v1/instances/2026-09-23-03.36.02.705840T01/presentationsummary" type="application/vnd.dsttechnologies.awd+xml"/><link rel="self" href="awdServer/awd/services/v1/instances/2026-09-23-03.36.02.705840T01" type="application/vnd.dsttechnologies.awd+xml"/><link rel="sources" href="awdServer/awd/services/v1/instances/2026-09-23-03.36.02.705840T01/children?type=O" type="application/vnd.dsttechnologies.awd+xml"/><link rel="next states" href="awdServer/awd/services/v1/instances/2026-09-23-03.36.02.705840T01/nextstates" type="application/vnd.dsttechnologies.awd+xml"/><fieldValues><fieldValue description="Key - Clone Obj" name="KEYC" sequence="1"><link rel="field" href="awdServer/awd/services/v1/fields/KEYC" type="application/vnd.dsttechnologies.awd+xml"/><link rel="self" href="awdServer/awd/services/v1/instances/2026-09-23-03.36.02.705840T01/fieldvalues/KEYC" type="application/vnd.dsttechnologies.awd+xml"/><self rel="self" href="awdServer/awd/services/v1/instances/2026-09-23-03.36.02.705840T01/fieldvalues/KEYC" type="application/vnd.dsttechnologies.awd+xml"/><value>2026-09-23-03.36.02.705840T01</value></fieldValue><fieldValue description="Amount" name="AMTV"><link rel="field" href="awdServer/awd/services/v1/fields/AMTV" type="application/vnd.dsttechnologies.awd+xml"/><link rel="self" href="awdServer/awd/services/v1/instances/2026-09-23-03.36.02.705840T01/fieldvalues/AMTV" type="application/vnd.dsttechnologies.awd+xml"/><self rel="self" href="awdServer/awd/services/v1/instances/2026-09-23-03.36.02.705840T01/fieldvalues/AMTV" type="application/vnd.dsttechnologies.awd+xml"/><value>0.0000</value></fieldValue></fieldValues><permission>Update</permission><secondaryTagline></secondaryTagline><businessAreaName href="awdServer/awd/services/v1/businessareas/AISCAN">AISCAN</businessAreaName><date>2026-09-23</date><lockedTo href="awdServer/awd/services/v1/users/GAURIMA">Gauri, Madhu, BATCH (GAURIMA)</lockedTo><summary>AISCAN - NEWDOC - 1) New Document - Ready to be Selected - Updateable - Locked By:GAURIMA - Create Date:2026-09-23 - Create Time:03:36:02-05:00</summary><time>03:36:02-05:00</time><typeName href="awdServer/awd/services/v1/businessareas/AISCAN/types/NEWDOC">NEWDOC</typeName><processStep>1) New Document - Ready to be Selected</processStep><priority>999</priority><priorityIncrease>0</priorityIncrease><processCsdType>Flow</processCsdType><overrideRouteFlag>false</overrideRouteFlag><assignedTo href="awdServer/awd/services/v1/users/GAURIMA">Gauri, Madhu, BATCH (GAURIMA)</assignedTo><process><name>AI GA Product Indexing Process</name><presentationFlag>true</presentationFlag><state>2</state><version>14</version></process><queueName href="awdServer/awd/services/v1/queues/WORKBOT">WORKBOT</queueName><state>in process</state><statusName href="awdServer/awd/services/v1/states/SCANNED" isFail="N" isNext="N" isPass="N">SCANNED</statusName></instance><instance workSelected="false" important="false" id="2026-09-23-06.55.10.241840T01" recordType="transaction"><link rel="children" href="awdServer/awd/services/v1/instances/2026-09-23-06.55.10.241840T01/children" type="application/vnd.dsttechnologies.awd+xml"/><link rel="fieldvalues" href="awdServer/awd/services/v1/instances/2026-09-23-06.55.10.241840T01/fieldvalues" type="application/vnd.dsttechnologies.awd+xml"/><link rel="form" href="awdServer/awd/services/v1/instances/2026-09-23-06.55.10.241840T01/form" type="application/vnd.dsttechnologies.awd+xml"/><link rel="history" href="awdServer/awd/services/v1/instances/2026-09-23-06.55.10.241840T01/history" type="application/vnd.dsttechnologies.awd+xml"/><link rel="presentation summary" href="awdServer/awd/services/v1/instances/2026-09-23-06.55.10.241840T01/presentationsummary" type="application/vnd.dsttechnologies.awd+xml"/><link rel="self" href="awdServer/awd/services/v1/instances/2026-09-23-06.55.10.241840T01" type="application/vnd.dsttechnologies.awd+xml"/><link rel="sources" href="awdServer/awd/services/v1/instances/2026-09-23-06.55.10.241840T01/children?type=O" type="application/vnd.dsttechnologies.awd+xml"/><link rel="next states" href="awdServer/awd/services/v1/instances/2026-09-23-06.55.10.241840T01/nextstates" type="application/vnd.dsttechnologies.awd+xml"/><fieldValues><fieldValue description="Key - Clone Obj" name="KEYC" sequence="1"><link rel="field" href="awdServer/awd/services/v1/fields/KEYC" type="application/vnd.dsttechnologies.awd+xml"/><link rel="self" href="awdServer/awd/services/v1/instances/2026-09-23-06.55.10.241840T01/fieldvalues/KEYC" type="application/vnd.dsttechnologies.awd+xml"/><self rel="self" href="awdServer/awd/services/v1/instances/2026-09-23-06.55.10.241840T01/fieldvalues/KEYC" type="application/vnd.dsttechnologies.awd+xml"/><value>2026-09-23-06.55.10.241840T01</value></fieldValue><fieldValue description="Amount" name="AMTV"><link rel="field" href="awdServer/awd/services/v1/fields/AMTV" type="application/vnd.dsttechnologies.awd+xml"/><link rel="self" href="awdServer/awd/services/v1/instances/2026-09-23-06.55.10.241840T01/fieldvalues/AMTV" type="application/vnd.dsttechnologies.awd+xml"/><self rel="self" href="awdServer/awd/services/v1/instances/2026-09-23-06.55.10.241840T01/fieldvalues/AMTV" type="application/vnd.dsttechnologies.awd+xml"/><value>0.0000</value></fieldValue></fieldValues><permission>Update</permission><secondaryTagline></secondaryTagline><businessAreaName href="awdServer/awd/services/v1/businessareas/AISCAN">AISCAN</businessAreaName><date>2026-09-23</date><summary>AISCAN - NEWDOC - 1) New Document - Ready to be Selected - Updateable - Assigned To:KUMNIKH - Create Date:2026-09-23 - Create Time:06:55:10-05:00</summary><time>06:55:10-05:00</time><typeName href="awdServer/awd/services/v1/businessareas/AISCAN/types/NEWDOC">NEWDOC</typeName><processStep>1) New Document - Ready to be Selected</processStep><priority>999</priority><priorityIncrease>0</priorityIncrease><processCsdType>Flow</processCsdType><overrideRouteFlag>false</overrideRouteFlag><assignedTo href="awdServer/awd/services/v1/users/KUMNIKH">Kumar, Nikhil, BATCH (KUMNIKH)</assignedTo><process><name>AI GA Product Indexing Process</name><presentationFlag>true</presentationFlag><state>2</state><version>14</version></process><queueName href="awdServer/awd/services/v1/queues/WORKBOT">WORKBOT</queueName><state>in process</state><statusName href="awdServer/awd/services/v1/states/SCANNED" isFail="N" isNext="N" isPass="N">SCANNED</statusName></instance></lookupResults>",
-regex: " id="([^"]+)""
+InstanceId: "2026-09-23-06.09.10.450840T01",
+jobid: "id_HUqLBZjO8HoXajMLXL5jixaxxVAI5i2eBKNGAhPAtA8=",
+ProcessStartTime: "2026-09-23T09:06:29.7295955-04:00",
+WorkflowName: "IndexingAgentFlow_v02",
+csrf_token: null
 },
 OUTPUTS: [
 {
 path: "Done",
 data: {
-Output: [
-" id="2026-09-23-03.36.02.705840T01"",
-" id="2026-09-23-06.55.10.241840T01""
-]
+InstanceId: "2026-09-23-06.09.10.450840T01",
+ObjectId: "2026-09-23-06.09.42.485840O01",
+ObjectData: {
+sourceInstance: {
+link: [
+{
+rel: "attachments",
+href: "awdServer/awd/services/v1/instances/2026-09-23-06.09.42.485840O01/attachments",
+type: "application/vnd.dsttechnologies.awd+xml"
+},
+{
+rel: "fieldvalues",
+href: "awdServer/awd/services/v1/instances/2026-09-23-06.09.42.485840O01/fieldvalues",
+type: "application/vnd.dsttechnologies.awd+xml"
+},
+{
+rel: "form",
+href: "awdServer/awd/services/v1/instances/2026-09-23-06.09.42.485840O01/form",
+type: "application/vnd.dsttechnologies.awd+xml"
+},
+{
+rel: "history",
+href: "awdServer/awd/services/v1/instances/2026-09-23-06.09.42.485840O01/history",
+type: "application/vnd.dsttechnologies.awd+xml"
+},
+{
+rel: "parents",
+href: "awdServer/awd/services/v1/instances/2026-09-23-06.09.42.485840O01/parents",
+type: "application/vnd.dsttechnologies.awd+xml"
+},
+{
+rel: "presentation summary",
+href: "awdServer/awd/services/v1/instances/2026-09-23-06.09.42.485840O01/presentationsummary",
+type: "application/vnd.dsttechnologies.awd+xml"
+},
+{
+rel: "self",
+href: "awdServer/awd/services/v1/instances/2026-09-23-06.09.42.485840O01",
+type: "application/vnd.dsttechnologies.awd+xml"
+},
+{
+rel: "archive",
+href: "awdServer/awd/services/v1/instances/2026-09-23-06.09.42.485840O01/archive",
+type: "application/vnd.dsttechnologies.awd+xml"
+}
+],
+fieldValues: [
+{
+link: [
+{
+rel: "field",
+href: "awdServer/awd/services/v1/fields/EXT",
+type: "application/vnd.dsttechnologies.awd+xml"
+},
+{
+rel: "self",
+href: "awdServer/awd/services/v1/instances/2026-09-23-06.09.42.485840O01/fieldvalues/EXT",
+type: "application/vnd.dsttechnologies.awd+xml"
+}
+],
+self: {
+rel: "self",
+href: "awdServer/awd/services/v1/instances/2026-09-23-06.09.42.485840O01/fieldvalues/EXT",
+type: "application/vnd.dsttechnologies.awd+xml"
+},
+value: "pdf",
+description: "GDL File EXT",
+name: "EXT",
+sequence: "1"
+},
+{
+link: [
+{
+rel: "field",
+href: "awdServer/awd/services/v1/fields/FLNM",
+type: "application/vnd.dsttechnologies.awd+xml"
+},
+{
+rel: "self",
+href: "awdServer/awd/services/v1/instances/2026-09-23-06.09.42.485840O01/fieldvalues/FLNM",
+type: "application/vnd.dsttechnologies.awd+xml"
+}
+],
+self: {
+rel: "self",
+href: "awdServer/awd/services/v1/instances/2026-09-23-06.09.42.485840O01/fieldvalues/FLNM",
+type: "application/vnd.dsttechnologies.awd+xml"
+},
+value: "1.pdf",
+description: "GDL File Name",
+name: "FLNM",
+sequence: "1"
+}
+],
+permission: "Update",
+secondaryTagline: "CONTRACT ",
+secondaryTaglinePattern: ""CONTRACT ";CNNO;",
+businessAreaName: {
+Value: "AISCAN",
+href: "awdServer/awd/services/v1/businessareas/AISCAN"
+},
+date: "2026-09-23",
+summary: "AISCAN - ATTACH - 190000000157 - Updateable - Create Date:2026-09-23 - Create Time:06:09:42-05:00 - CONTRACT ",
+time: "06:09:42-05:00",
+typeName: {
+Value: "ATTACH",
+href: "awdServer/awd/services/v1/businessareas/AISCAN/types/ATTACH"
+},
+createStation: "GAURIMA",
+createUser: {
+Value: "Gauri, Madhu, BATCH (GAURIMA)",
+href: "awdServer/awd/services/v1/users/GAURIMA"
+},
+objectFormat: {
+Value: "ASCII",
+format: "A"
+},
+objectId: "190000000157",
+opticalStatus: {
+Value: "Original state",
+status: "2"
+},
+receiveDate: "2026-09-23",
+receiveTime: "06:09:42-05:00",
+securityLevel: "0",
+id: "2026-09-23-06.09.42.485840O01",
+recordType: "source"
+},
+total: "1"
+},
+FieldCollectionValues: [
+{
+link: [
+{
+rel: "field",
+href: "awdServer/awd/services/v1/fields/EXT",
+type: "application/vnd.dsttechnologies.awd+xml"
+},
+{
+rel: "self",
+href: "awdServer/awd/services/v1/instances/2026-09-23-06.09.42.485840O01/fieldvalues/EXT",
+type: "application/vnd.dsttechnologies.awd+xml"
+}
+],
+self: {
+rel: "self",
+href: "awdServer/awd/services/v1/instances/2026-09-23-06.09.42.485840O01/fieldvalues/EXT",
+type: "application/vnd.dsttechnologies.awd+xml"
+},
+value: "pdf",
+description: "GDL File EXT",
+name: "EXT",
+sequence: "1"
+}
+],
+JobLogList: null
 }
 }
 ]
