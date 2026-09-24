@@ -51,3 +51,91 @@ Value: "0"
 }
 ]
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{
+INPUTS: {
+Operation: "documentClassifiers/IA-Classification-v11/analyzeResults/cec65d42-b644-4fb4-80da-9ba37d7da471?api-version=2024-11-30",
+AuthToken: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6ImRndlNEdks4QTVLeUt5cHB3MWRBd1RYRDNDQSIsImtpZCI6ImRndlNEdks4QTVLeUt5cHB3MWRBd1RYRDNDQSJ9.eyJhdWQiOiJodHRwczovL2NvZ25pdGl2ZXNlcnZpY2VzLmF6dXJlLmNvbSIsImlzcyI6Imh0dHBzOi8vc3RzLndpbmRvd3MubmV0LzVkM2UyNzczLWUwN2YtNDQzMi1hNjMwLTFhMGY2OGEyOGEwNS8iLCJpYXQiOjE3OTAyNDEwMjQsIm5iZiI6MTc5MDI0MTAyNCwiZXhwIjoxNzkwMjQ0OTI0LCJhaW8iOiJBU1FBMi84ZUFBQUFLNjV1S2ZTTHExOWFyY0FlWGJwUEkxQjgwLy9HcmNQQjluOWNxbEtoNFp3PSIsImFwcGlkIjoiM2U1N2NmMTUtYmE1MS00ZmFlLWI3YzYtZWZiMGE0NjUyODc4IiwiYXBwaWRhY3IiOiIxIiwiaWRwIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvNWQzZTI3NzMtZTA3Zi00NDMyLWE2MzAtMWEwZjY4YTI4YTA1LyIsImlkdHlwIjoiYXBwIiwib2lkIjoiZWM4ZDI2ZjgtZDhlMy00MTQ1LTgzNDktODM5YmRiZTI3NTBjIiwicmgiOiIxLkFSTUFjeWMtWFhfZ01rU21NQm9QYUtLS0JaQWlNWDNJS0R4SG9PMk9VM1NiYlcwQUFBQVRBQS4iLCJzdWIiOiJlYzhkMjZmOC1kOGUzLTQxNDUtODM0OS04MzliZGJlMjc1MGMiLCJ0aWQiOiI1ZDNlMjc3My1lMDdmLTQ0MzItYTYzMC0xYTBmNjhhMjhhMDUiLCJ1dGkiOiJCT2hOTlNXcU9FNmR2OGFYQ0VORkFBIiwidmVyIjoiMS4wIiwieG1zX2FjdF9mY3QiOiI5IDMiLCJ4bXNfZnRkIjoiSTk3bmQ5a3Z3RWIyWkxoQ0V2R2FRQ0ppQTVXajV5c1J3cllsZDhKUWJWd0JkWE56YjNWMGFDMWtjMjF6IiwieG1zX2lkcmVsIjoiNyAzMCIsInhtc19yZCI6IjAuQVY4QW9QOEtCUWdDRWdFVEVoUUlCeElRYnVaRkJidU9mVU84QVRHN216SzJMeElVQ0FrU0VNTmdHSHRJb1ZGSWdLdXpPZEZhbjVVU0ZBZ0lFaENRSWpGOXlDZzhSNkR0amxOMG0yMXRFaFFJQ3hJUTV3Z2tGTDlNSG9seE4xanpsTk5SY1EiLCJ4bXNfc3ViX2ZjdCI6IjMgOSJ9.GvFXk6NHw5CxAvt1Yr4ktYnnULSvcS1YDcI_7fIQOqIV_EC5ewQ2gO_VvUkS38n-MmwKtN0kq4YgqfRNIb1zHc8C1IwzJzQOsR9TeFMyqia8X45xub_w7tBDrVoAWAWyCybaAFKou9iuj1CNkrxM3CkWl5-KXho6Y_ejzb7bQ5KfWJQ3j0wzzPYq7domuS3KmeIi7w7_KFVF5KyyyxaYT8YmfCsuoZLk9-iMEoFty2PjiKaGM0ZwQG8Gc4dirmUpz_3v2kTLR4GnVGsyICQ1Sk4WShh0FIm3DWrX9Wu96E8Kt5rd9VFd1sFOedGUPjE-16NBi3pyIHCJjldefAP-aA"
+},
+OUTPUTS: [
+{
+path: "Done",
+data: {
+Result: "{"status":"succeeded","createdDateTime":"2026-09-24T09:15:25Z","lastUpdatedDateTime":"2026-09-24T09:15:29Z","analyzeResult":{"apiVersion":"2024-11-30","modelId":"IA-Classification-v11","stringIndexType":"utf16CodeUnit","content":"","pages":[{"pageNumber":1,"angle":0,"width":8.5,"height":11,"unit":"inch","words":[],"lines":[],"spans":[]},{"pageNumber":2,"angle":0,"width":8.5,"height":11,"unit":"inch","words":[],"lines":[],"spans":[]}],"documents":[{"docType":"1111","boundingRegions":[{"pageNumber":1,"polygon":[0,0,8.5,0,8.5,11,0,11]}],"confidence":0.008,"spans":[]},{"docType":"1111","boundingRegions":[{"pageNumber":2,"polygon":[0,0,8.5,0,8.5,11,0,11]}],"confidence":0.083,"spans":[]}],"contentFormat":"text"}}",
+Status Code: 200,
+Headers: [
+{
+Key: "Date",
+Value: "Thu, 24 Sep 2026 09:15:35 GMT"
+},
+{
+Key: "Server",
+Value: "istio-envoy"
+},
+{
+Key: "x-envoy-upstream-service-time",
+Value: "62"
+},
+{
+Key: "apim-request-id",
+Value: "35e7f071-4f59-45c8-9763-3773dda002c1"
+},
+{
+Key: "Strict-Transport-Security",
+Value: "max-age=31536000; includeSubDomains; preload"
+},
+{
+Key: "X-Content-Type-Options",
+Value: "nosniff"
+},
+{
+Key: "x-ms-region",
+Value: "Canada Central"
+},
+{
+Key: "Content-Length",
+Value: "716"
+},
+{
+Key: "Content-Type",
+Value: "application/json; charset=utf-8"
+}
+]
+}
+}
+]
+}
