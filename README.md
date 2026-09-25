@@ -1,3 +1,24 @@
+README
+Doc Processing Service
+A generic, reusable AI document-processing service built with the Akka SDK.
+
+Expose OCR, Classification, and Data extractions capabilities as HTTP and MCP endpoints.
+
+Capability	Input	Result
+OCR	- PDF document
+- optional parameters to enable/disable quality and spam checks, and to configure thresholds	- Document Text
+- Document Quality score
+- Detected languages
+Document Classification	- PDF document
+- OCR text
+- Ordered list of allowed categories with descriptions	- Matched categories (in request order; may be filtered by confidence threshold)
+Data Extraction	- PDF document
+- OCR text
+- Ordered list of data fields to extract with extraction instructions	- Extracted values, each paired with the location(s) in the document where it was found (one entry per requested field, in the same order)
+OCR is provided as a standalone capability and is a prerequisite for the other features; Classification and Data Extraction require OCR text as input.
+
+diagram.png
+
 Usage
 Online webpage
 GET /process exposes a browser-based console to use the service without any programming required. It supports OCR, Document Classification, and Data Extraction via a point-and-click form with built-in Entra ID SSO.
@@ -84,5 +105,3 @@ The capabilities are exposed as MCP tools on /mcp path. Following the MCP protoc
 npx @modelcontextprotocol/inspector
 
 mcp-inspector.png
-
-Bruno
