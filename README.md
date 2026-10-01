@@ -1,36 +1,5 @@
-{
-  "fieldId": "first_name",
-  "description": "Participant first name",
-  "dataType": "string",
-  "extractionRules": "Participant first name. If name has a comma, use text after the comma as first name. If no comma, Mandatory. use second word as first name. Return only first name."
-},
-{
-  "fieldId": "contract_number",
-  "description": "Participant Contract Number",
-  "dataType": "string",
-  "extractionRules": "Extract the participant contract number from the form it can go from 4 to 6 digit number"
-},
-{
-  "fieldId": "ssn",
-  "description": "Participant ssn",
-  "dataType": "string",
-  "extractionRules": "Mandatory. Extract participant Social Security Number from participant header area. Priority labels: SSN, Social Security Number, Participant Social Security Number, Full SSN Required, form field SSN. Accept XXX-XX-XXXX or XXXXXXXXX. Return 9 digits only"
-},
-{
-  "fieldId": "reason_code",
-  "description": "Loan request reason code",
-  "dataType": "string",
-  "extractionRules": "Mandatory. Extract the loan request reason code from Section 4, 'Type of Loan Request – Select ONE only'. If option A – New Loan Request is selected, return 'Loan Issue'. If option B – Refinance Existing Loan is selected, return 'Loan Consolidation'. If the selection mark is unclear but an amount is populated under B – Refinance Existing Loan (BloanAmount), return 'Loan Consolidation'. Return only one of these exact values: 'Loan Issue' or 'Loan Consolidation'. Do not return the option letter A or B."
-}
+System.Net.Http.HttpRequestException: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond. (proud-dawn-5395.az-manulife-canada-crt-cac.agents.akka.manulife.io:443) ---> System.Net.Sockets.SocketException (10060): A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond. at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token) at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|285_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken) at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken) --- End of inner exception stack trace --- at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken) at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken) at System.Net.Http.HttpConnectionPool.CreateHttp11ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken) at System.Net.Http.HttpConnectionPool.AddHttp11ConnectionAsync(QueueItem queueItem) at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellation(CancellationToken cancellationToken) at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken) at System.Net.Http.HttpMessageHandlerStage.Send(HttpRequestMessage request, CancellationToken cancellationToken) at System.Net.Http.DiagnosticsHandler.SendAsyncCore(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken) at System.Net.Http.HttpMessageHandlerStage.Send(HttpRequestMessage request, CancellationToken cancellationToken) at System.Net.Http.Metrics.MetricsHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken) at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken) at System.Net.Http.HttpMessageHandlerStage.Send(HttpRequestMessage request, CancellationToken cancellationToken) at System.Net.Http.SocketsHttpHandler.Send(HttpRequestMessage request, CancellationToken cancellationToken) at System.Net.Http.HttpClient.Send(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationToken cancellationToken) at DecisionsFramework.ServiceLayer.Services.ExternalServiceReference.RESTService.RestServiceMethodStep.Run(StepStartData data)
 
 
-
-
-
-
-{
-  "fieldId": "reason_code",
-  "description": "Withdrawal reason code",
-  "dataType": "string",
-  "extractionRules": "Mandatory. Extract the withdrawal reason code from Section 2, 'Withdrawal Reason and Year of Excess – Select one withdrawal reason'. Evaluate the selection status of EC, ED, and EA. EC represents Excess Contribution Withdrawal, ED represents Excess Deferral Withdrawal, and EA represents Excess Annual Addition Withdrawal. Count the selected options and unselected options. If the number of selected options is greater than 1, return 'EC'. If the number of unselected options is greater than 2, return 'EC'. Otherwise, if EC is selected, return 'EC'. If ED is selected, return 'ED'. If EA is selected, return 'EA'. Return only one value: 'EC', 'ED', or 'EA'."
-}
+ssn credentials and all were provided to me client is secret application id , to call the api 
+bearer token i am able to create but while calling /classify and extract/ endpoints I am getting this error ,
