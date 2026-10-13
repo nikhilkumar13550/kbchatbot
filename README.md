@@ -1,4 +1,5 @@
 {
+INPUTS: {
 Multipart Form Data: [
 {
 Name: "params",
@@ -27,5 +28,18 @@ Filename: null,
 AdditionalHeaders: null
 }
 ],
-AccessToken: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImRndlNEdks4QTVLeUt5cHB3MWRBd1RYRDNDQSJ9.eyJhdWQiOiJmZDc1NTQ3Ny1mN2VkLTQ3MGMtOTk4MC0wZmEwOTI4ZTczMDAiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vNWQzZTI3NzMtZTA3Zi00NDMyLWE2MzAtMWEwZjY4YTI4YTA1L3YyLjAiLCJpYXQiOjE3OTE5MDQyODYsIm5iZiI6MTc5MTkwNDI4NiwiZXhwIjoxNzkxOTA4MTg2LCJhaW8iOiJrMk5nWUhEWjVmcHc5NFRqTWQrMnE3MlQ2WHArNTFUMi83NnAraTR1Nm5uSGVObE52RjBBIiwiYXpwIjoiM2U1N2NmMTUtYmE1MS00ZmFlLWI3YzYtZWZiMGE0NjUyODc4IiwiYXpwYWNyIjoiMSIsIm9pZCI6ImVjOGQyNmY4LWQ4ZTMtNDE0NS04MzQ5LTgzOWJkYmUyNzUwYyIsInJoIjoiMS5BUk1BY3ljLVhYX2dNa1NtTUJvUGFLS0tCWGRVZGYzdDl3eEhtWUFQb0pLT2N3QUFBQUFUQUEuIiwicm9sZXMiOlsiVXNlcnMiXSwic3ViIjoiZWM4ZDI2ZjgtZDhlMy00MTQ1LTgzNDktODM5YmRiZTI3NTBjIiwidGlkIjoiNWQzZTI3NzMtZTA3Zi00NDMyLWE2MzAtMWEwZjY4YTI4YTA1IiwidXRpIjoiZWNyZ1h2MVBta3lkVUU3MUFWSlRBQSIsInZlciI6IjIuMCIsInhtc19mdGQiOiJvZXB2SG1ZNno3bmNOaXBscC1FYmVRSXhFdkNNQlE4MFRRQVNSN3hkV0JVQmRYTjNaWE4wTXkxa2MyMXoifQ.Wzp6TADSJiFMpDjh71f5l5lk6_Gd2c40Y3HtwulusfTY_EZvVal42RppCW3Okq9G6bO7Yaig-u2DvitH-UMgw1p5X5YTH7DINqw1yNRumZO9hMnm_G51mBHyZyJEf2N_lSGngSfPMfcmkeOo0GYbfnNfv92YmgYRrBOVE3hjhz982yDk5rl3hf_0Ea0dsqQPbZb2QzxJJPj0jtn1gYSabNhMcE42Bkx9dyl53GWEoGrhUcScLVQZ1kxkeAO1-LY0J6SEcqUHKPBmnDu2-26g_wbgdlboXAw1l-bhRuml6td7YHpFrfYvVNRZ_5Ex_c85pkXz9uEgwmrDDwjTBA0xGQ"
+AccessToken: "Bearer eyJ0Q"
+},
+OUTPUTS: [
+{
+path: "Error",
+data: {
+Error: "The remote server returned an error: (400) Bad Request.",
+Full Error: "The remote server returned an error: (400) Bad Request.",
+URL Called: https://proud-dawn-5395.az-manulife-canada-crt-cac.agents.akka.manulife.io/doc-processing/classify,
+Error Response: "Invalid request: Invalid multipart field 'params': Unexpected character ('M' (code 77)): was expecting comma to separate Object entries",
+Status Code: 400
+}
+}
+]
 }
