@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Configurable QC — MVP Scope Overview</title>
+<style>
+:root{
+  --bg:#f4f6f9; --card:#ffffff; --ink:#1b2333; --muted:#5b6678; --line:#dde2ea;
+  --navy:#16285a; --teal:#0f8b8d; --green:#2e9e5b; --amber:#d9902b; --grey:#a9b2c1; --red:#c2463a;
+  --soft-teal:#e3f4f4; --soft-amber:#fbf0de; --soft-grey:#eef0f4; --soft-green:#e5f5eb;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#11151d; --card:#1a2030; --ink:#e7ebf2; --muted:#a3adbf; --line:#2c3446;
+    --navy:#8fb0ff; --soft-teal:#123a3b; --soft-amber:#3a2e17; --soft-grey:#232a39; --soft-green:#173524; }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",Aptos,Calibri,Arial,sans-serif;font-size:15px;line-height:1.45}
+.wrap{max-width:1180px;margin-inline:auto;padding:28px 24px 48px}
+header.hero{background:linear-gradient(120deg,#16285a,#0f6f7a);color:#fff;border-radius:14px;padding:28px 30px}
+.hero h1{margin:0 0 6px;font-size:28px}
+.hero p{margin:0;opacity:.88}
+.hero .src{font-size:12px;margin-block-start:12px;opacity:.75}
+nav.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:22px 0 14px;position:sticky;top:0;background:var(--bg);padding-block:8px;z-index:5}
+nav.tabs button{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:9px 16px;border-radius:999px;cursor:pointer;font:inherit;font-weight:600}
+nav.tabs button.active{background:var(--navy);border-color:var(--navy);color:#fff}
+@media (prefers-color-scheme: dark){nav.tabs button.active{color:#11151d}}
+section.view{display:none} section.view.active{display:block}
+.grid{display:grid;gap:14px}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+.kpi .v{font-size:32px;font-weight:700;color:var(--navy)}
+.kpi .l{color:var(--muted);font-size:13px}
+.kpi .s{font-size:12px;color:var(--muted);margin-block-start:6px}
+h2{font-size:19px;margin:26px 0 10px}
+h3{font-size:15px;margin:0 0 10px}
+.two{grid-template-columns:1fr 1fr} @media(max-width:820px){.two{grid-template-columns:1fr}}
+.donut{width:170px;height:170px;border-radius:50%;margin:6px auto;position:relative}
+.donut::after{content:"";position:absolute;inset:26px;border-radius:50%;background:var(--card)}
+.donut span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1;font-weight:700;font-size:24px;flex-direction:column}
+.donut span small{font-size:11px;font-weight:400;color:var(--muted)}
+.legend{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-inline-end:5px;vertical-align:middle}
+.toggle{display:flex;gap:6px;justify-content:center;margin-block-end:6px}
+.toggle button{font:inherit;font-size:12px;border:1px solid var(--line);background:var(--soft-grey);color:var(--ink);border-radius:6px;padding:4px 10px;cursor:pointer}
+.toggle button.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+.bars .row{display:grid;grid-template-columns:170px 1fr 60px;gap:10px;align-items:center;margin-block:5px;font-size:13px}
+.bars .track{background:var(--soft-grey);border-radius:6px;height:18px;overflow:hidden}
+.bars .fill{height:100%;background:var(--teal);border-radius:6px;transition:width .6s}
+.bars .fill.warn{background:var(--amber)}
+.bars .num{text-align:end;font-variant-numeric:tabular-nums;font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:5px 10px;border-radius:999px;font-size:12.5px;border:1px solid var(--line);background:var(--soft-grey)}
+.chip.mvp{background:var(--soft-teal);border-color:var(--teal);font-weight:600}
+.chip.later{background:var(--soft-amber)}
+.phase-filter{display:flex;gap:6px;flex-wrap:wrap;margin-block-end:12px}
+.phase-filter button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:6px 12px;cursor:pointer}
+.phase-filter button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.sys{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.sys .card{padding:14px}
+.sys .tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.tag.mvp{color:var(--teal)} .tag.later{color:var(--amber)} .tag.no{color:var(--red)} .tag.tbd{color:var(--muted)}
+.prog{height:12px;background:var(--soft-grey);border-radius:6px;overflow:hidden;margin-block:8px}
+.prog > div{height:100%;background:var(--green)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{padding:9px 10px;border-block-end:1px solid var(--line);text-align:start;vertical-align:top}
+th{background:var(--soft-grey);font-size:12px;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);cursor:pointer;user-select:none;white-space:nowrap}
+th.c,td.c{text-align:center}
+tr.main{cursor:pointer} tr.main:hover{background:var(--soft-teal)}
+tr.detail td{background:var(--soft-grey);font-size:13px}
+tr.detail{display:none} tr.detail.open{display:table-row}
+.m{display:inline-block;width:14px;height:14px;border-radius:50%}
+.m.yes{background:var(--teal)} .m.part{background:var(--amber)} .m.no{border:2px solid var(--grey)}
+.badge{font-size:11.5px;padding:3px 8px;border-radius:999px;font-weight:600;white-space:nowrap}
+.b-prog{background:var(--soft-amber);color:#8a5a12} .b-map{background:var(--soft-green);color:#1f6b3d} .b-not{background:var(--soft-grey);color:var(--muted)} .b-ext{background:#f6e1df;color:#8f2f26}
+@media (prefers-color-scheme: dark){.b-prog{color:#f2c27a}.b-map{color:#8fdcaa}.b-ext{background:#3d2220;color:#f0a59d}}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-block-end:10px}
+.toolbar input,.toolbar select{font:inherit;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+.note{font-size:12.5px;color:var(--muted)}
+ul.watch li{margin-block:6px}
+.callout{border-inline-start:4px solid var(--amber);background:var(--soft-amber);padding:12px 14px;border-radius:8px;font-size:13.5px}
+.scopebox{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:stretch}
+@media(max-width:820px){.scopebox{grid-template-columns:1fr}.scope-arrow{display:none}}
+.scope-in,.scope-all{border-radius:12px;padding:18px 20px;border:1px solid var(--line);background:var(--card)}
+.scope-in{border:2px solid var(--teal);background:var(--soft-teal)}
+.scope-arrow{display:flex;align-items:center;font-weight:700;color:var(--muted);font-size:18px}
+.scopebox .big{font-size:20px;font-weight:700;margin-block:4px 8px}
+.scopebox .nums{display:flex;gap:22px;font-size:15px}.scopebox .nums strong{font-size:28px;color:var(--navy);margin-inline-end:4px}
+.stack{display:flex;height:34px;border-radius:8px;overflow:hidden;font-size:13px;font-weight:600;color:#fff}
+.stack .seg{display:flex;align-items:center;justify-content:center;white-space:nowrap}
+.stack .seg.mvp{background:var(--teal)}.stack .seg.later{background:var(--amber)}
+.stack-legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-block-start:8px}
+.tbtn{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:7px 12px;cursor:pointer}
+.tbtn:hover{border-color:var(--teal)}
+.tbtn.primary{background:var(--teal);border-color:var(--teal);color:#fff;font-weight:600}
+.tbtn.primary.on{background:var(--green);border-color:var(--green)}
+.tbtn.ghost{background:transparent}
+.toolbar .spacer{flex:1}
+.editbar{display:flex;gap:16px;flex-wrap:wrap;margin-block-end:8px;min-height:18px}
+.note.warn{color:var(--red);font-weight:600}
+.editbar .m{width:11px;height:11px;vertical-align:middle}
+button.m{padding:0;cursor:pointer;background-clip:padding-box}
+button.m.no{background:transparent}
+button.m:hover{transform:scale(1.25)}
+table.editing tr.main{cursor:default}
+table.editing tr.main:hover{background:transparent}
+.ed-name{font:inherit;font-weight:700;width:100%;min-width:130px;padding:5px 7px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink)}
+.ed-num{font:inherit;width:70px;padding:5px;border:1px solid var(--line);border-radius:6px;text-align:center;background:var(--card);color:var(--ink)}
+.ed-st{font:inherit;font-size:12.5px;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink)}
+.rowdel{border:none;background:transparent;color:var(--muted);cursor:pointer;font-size:13px}
+.rowdel:hover{color:var(--red)}
+.ed-detail{min-height:40px;padding:8px 10px;border:1px dashed var(--teal);border-radius:6px;background:var(--card);outline:none}
+.ed-detail:focus{border-style:solid;box-shadow:0 0 0 2px var(--soft-teal)}
+.b-done{background:var(--green);color:#fff}
+.b-rev{background:#e6e9f5;color:#3b4a7a}
+@media (prefers-color-scheme: dark){.b-rev{background:#2a3150;color:#b9c4f0}}
+.patterns{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-block-start:10px}
+.patterns div{background:var(--soft-teal);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:3px}
+.patterns strong{color:var(--teal)} .patterns span{font-size:12.5px;color:var(--muted)}
+.sessions{display:grid;gap:12px}
+details.sess summary{cursor:pointer;display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;list-style:none}
+details.sess summary::-webkit-details-marker{display:none}
+details.sess summary::before{content:"▸";color:var(--teal);font-weight:700}
+details.sess[open] summary::before{content:"▾"}
+.sess .sn{font-weight:700;color:var(--teal)} .sess .st{font-weight:700;font-size:16px} .sess .sd{margin-inline-start:auto;color:var(--muted);font-size:13px}
+.sess h4{margin:12px 0 4px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.sess ul{margin:0;padding-inline-start:20px} .sess li{margin-block:4px}
+.tabgrid{display:flex;flex-wrap:wrap;gap:6px}
+.tchip{padding:6px 11px;border-radius:999px;font-size:12.5px;border:1px solid var(--line);background:var(--soft-grey);color:var(--muted)}
+.tchip.done{background:var(--soft-green);border-color:var(--green);color:var(--ink);font-weight:600}
+.tchip.done::before{content:"✓ ";color:var(--green)}
+.stack .seg.done{background:var(--green)}.stack .seg.todo{background:var(--grey)}
+.tchip.oos{background:var(--soft-amber);border-color:var(--amber);color:var(--ink)}
+.tchip.oos::after{content:" · proposed out of scope";font-weight:400;color:var(--muted)}
+.stack .seg.oos{background:var(--amber)}
+.oosdot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--amber);vertical-align:middle}
+.b-oos{background:var(--soft-amber);color:#8a5a12}
+@media (prefers-color-scheme: dark){.b-oos{color:#f2c27a}}
+h3.track{margin:22px 0 8px;font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+details.sess.contract{border-inline-start:4px solid var(--navy)}
+details.sess.contract .sn{color:var(--navy)}
+.srow{display:grid;grid-template-columns:110px 1fr 60px;gap:10px;align-items:center;margin-block:7px;font-size:13px}
+.sname{font-weight:700}.sdone{text-align:end;font-weight:600;font-variant-numeric:tabular-nums}
+.sstack{display:flex;height:24px;border-radius:6px;overflow:hidden;background:var(--soft-grey)}
+.sseg{display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff}
+.slegend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-block-start:10px}
+.sdot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-inline-end:5px;vertical-align:middle}
+.s-done{background:var(--green);color:#fff}.s-notreq{background:#8e9bb5;color:#fff}.s-partial{background:var(--amber);color:#fff}
+.s-todo{background:var(--soft-grey);color:var(--muted)}.s-none{background:transparent;color:var(--muted);border:1px dashed var(--grey)}
+.sseg.s-todo{background:#cfd5df;color:#4a5568}.sseg.s-none{background:transparent;color:var(--muted)}
+.schip{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;font-size:13px;font-weight:700;border:none;font-family:inherit}
+.schip.s-todo{border:1.5px solid var(--grey);background:transparent}
+button.schip{cursor:pointer}button.schip:hover{transform:scale(1.15)}
+tr.grp th{background:transparent;font-size:11px;padding-block:6px 0;border-block-end:none}
+.oosl{font-size:12px;color:var(--muted);white-space:nowrap}
+details.sess.mc{border-inline-start:4px solid var(--teal)}
+.edmark{color:var(--teal);font-size:10px;margin-inline-start:3px;vertical-align:super}
+.chg{color:var(--amber);font-weight:700;margin-inline-start:3px;cursor:help}
+.openb{display:inline-block;background:var(--soft-amber);color:#8a5a12;border-radius:999px;padding:2px 8px;font-size:12px;font-weight:700;cursor:help}
+@media (prefers-color-scheme: dark){.openb{color:#f2c27a}}
+.chkline{margin-block-start:8px;color:#8a5a12;font-size:12.5px}
+.card.method{margin-block-start:14px}.card.method ul{margin:0;padding-inline-start:20px}.card.method li{margin-block:5px;font-size:13.5px}
+footer{margin-block-start:30px;font-size:12px;color:var(--muted)}
+@media print{.editbar,nav.tabs,.toolbar,.phase-filter,.toggle{display:none} section.view{display:block!important;page-break-inside:avoid} tr.detail{display:table-row!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <h1>Configurable QC — MVP Scope Overview</h1>
+  <p>Non-COV New Issue QC · Policy App mapping status as of October 22, 2026</p>
+  <p class="src">Source: Policy App Mapping to Systems.xlsx (MVP Overview tab and EHC mapping tabs) · Configurable QC One Pager (Oct 2026) · SME mapping session summaries (V3/ESC/CPM and Contract)</p>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button class="active" data-view="v-summary">Summary</button>
+  <button data-view="v-scope">Policy App Scope</button>
+  <button data-view="v-systems">Systems</button>
+  <button data-view="v-pages">Status by Tab</button>
+  <button data-view="v-sessions">SME Sessions</button>
+  <button data-view="v-next">Watch Items</button>
+</nav>
+
+<!-- SUMMARY -->
+<section class="view active" id="v-summary">
+  <div class="scopebox">
+    <div class="scope-in">
+      <div class="tag mvp">In the MVP</div>
+      <div class="big">EHC / Drug tabs only</div>
+      <div class="nums"><span><strong>12</strong> tabs</span><span><strong>611</strong> fields</span></div>
+    </div>
+    <div class="scope-arrow">of</div>
+    <div class="scope-all">
+      <div class="tag tbd">Full scope (MVP + all later phases)</div>
+      <div class="big">Every in-scope Policy App benefit tab</div>
+      <div class="nums"><span><strong>40</strong> tabs</span><span><strong>2,416</strong> fields</span></div>
+    </div>
+  </div>
+  <div class="card" style="margin-block:14px">
+    <h3>Field coverage across the full program</h3>
+    <div class="stack"><div class="seg mvp" style="width:25.3%">MVP · 611</div><div class="seg later" style="width:74.7%">Later phases · 1,805</div></div>
+    <div class="stack-legend"><span><i class="dot" style="background:var(--teal)"></i>MVP — 12 EHC/Drug tabs, 611 fields (25.3%)</span><span><i class="dot" style="background:var(--amber)"></i>Later phases — 28 tabs, 1,805 fields (74.7%)</span></div>
+    <p class="note">Not counted in the 40 tabs: 14 administrative / form tabs marked N/A and the Direct Drug Variations tab (information only, not part of mapping).</p>
+  </div>
+  <div class="grid kpis">
+    <div class="card kpi"><div class="v">25.3%</div><div class="l">of in-scope Policy App fields in MVP</div><div class="s">611 of 2,416 fields</div></div>
+    <div class="card kpi"><div class="v">30.0%</div><div class="l">of in-scope Policy App tabs in MVP</div><div class="s">12 of 40 tabs</div></div>
+  </div>
+  <h2>Mapping status</h2>
+  <div class="grid kpis statusTiles"></div>
+  <div class="card" style="margin-block-start:14px">
+    <h3>Status by system — 12 MVP tabs</h3>
+    <div class="sysStatus"></div>
+    <p class="note">From the System / Mapping Status block at the top of each tab in the mapping workbook. "Done" counts Complete plus Not required. See "How these numbers are worked out" on the Status by Tab tab. Booklet isn't tracked in the workbook status yet.</p>
+  </div>
+  <div class="callout" style="margin-block-start:14px"><strong>Why this matters — a real example (Oct 22):</strong> an external auditor found hospital co-insurance missing from a client's contract and booklet. In the ManuConnect mapping session the SME said of Configurable QC: "This tool probably would have caught it." The Drug contract session flagged a second known audit exposure — preventative drug items coded "No" that must be removed from one contract section and added to the not-covered list.</div>
+  <div class="grid two" style="margin-block-start:14px">
+    <div class="card">
+      <h3>How much of the in-scope Policy App does the MVP cover?</h3>
+      <div class="toggle" id="donutToggle">
+        <button class="active" data-mode="cells">By fields</button>
+        <button data-mode="tabs">By tabs</button>
+      </div>
+      <div class="donut" id="donut"><span id="donutLabel">25.3%<small id="donutSub">611 / 2,416 fields</small></span></div>
+      <div class="legend"><span><i class="dot" style="background:var(--teal)"></i>MVP (EHC/Drug)</span><span><i class="dot" style="background:var(--soft-grey);border:1px solid var(--line)"></i>Later phases</span></div>
+    </div>
+    <div class="card">
+      <h3>What the MVP is</h3>
+      <p><strong>EHC/Drug tabs only.</strong> 12 Policy App tabs and 611 fields. All other benefit tabs (Life, AD&amp;D, Disability, Dental, Critical Illness, spending accounts, etc.) are later phases.</p>
+      <p><strong>Mapping first.</strong> Connect selected Policy App data entry points to where each value lives downstream (system, screen, field, or document), then compare and flag mismatches for an auditor to review.</p>
+      <p><strong>Why EHC/Drug.</strong> The write-off analysis identified Drugs as the highest-risk area. Starting here keeps the MVP manageable while proving an approach that can expand to other benefits.</p>
+      <p><strong>Read-only.</strong> The QC tool flags discrepancies; it does not correct source systems, contracts, or booklets.</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-block-start:14px">
+    <h3>Fillable fields per MVP tab (611 total, from the MVP Overview field audit)</h3>
+    <div class="bars" id="cellBars"></div>
+    <p class="note">Direct Drug Variations is reference information only and is not part of the mapping, so it is excluded from the MVP count.</p>
+  </div>
+</section>
+
+<!-- SCOPE -->
+<section class="view" id="v-scope">
+  <h2>Policy App tabs by phase — 12 MVP + 28 later phase = 40 in scope</h2>
+  <div class="phase-filter" id="phaseFilter">
+    <button class="active" data-p="all">All</button>
+    <button data-p="MVP">MVP</button>
+    <button data-p="Later Phase">Later Phase</button>
+    <button data-p="N/A">N/A</button>
+    <button data-p="Information only">Information only</button>
+  </div>
+  <div class="card"><div id="tabGroups"></div></div>
+  <p class="note">The 40 in-scope tabs are the 12 MVP tabs plus the 28 later-phase tabs (2,416 fields in total). The 14 N/A tabs and the information-only tab are excluded from scope.</p>
+</section>
+
+<!-- SYSTEMS -->
+<section class="view" id="v-systems">
+  <h2>Downstream systems &amp; documents — target phase</h2>
+  <div class="phase-filter" id="sysFilter">
+    <button class="active" data-p="all">All</button>
+    <button data-p="mvp">MVP</button>
+    <button data-p="later">Later Phase</button>
+    <button data-p="no">Not in scope</button>
+    <button data-p="tbd">No phase assigned</button>
+  </div>
+  <div class="sys" id="sysCards"></div>
+
+  <h2>Extraction control</h2>
+  <div class="card">
+      <div class="prog"><div style="width:100%"></div></div>
+      <p><strong>612 data elements</strong> across the 12 MVP tabs. The control check passed on all 12.</p>
+      <p class="note">3 uncertain cells in EHCMisc are held for manual review. Counted by Policy App source cell. Tab counts have changed during mapping: EHCProfServ 129→136, EHCOOC 21→13→22 (now includes the cells mapped to the contract and ManuConnect), EHCDrugCustom 88→89.</p>
+    </div>
+</section>
+
+<!-- PAGES -->
+<section class="view" id="v-pages">
+  <h2>Mapping status by Policy App tab</h2>
+  <div class="grid kpis statusTiles" style="margin-block-end:14px"></div>
+  <div class="toolbar">
+    <input id="search" type="search" placeholder="Search tabs…" aria-label="Search tabs">
+    <select id="statusSel" aria-label="Filter by V3/ESC/CPM status">
+      <option value="">All V3/ESC/CPM statuses</option>
+      <option>Complete</option>
+      <option>Pending validation</option>
+      <option>In progress</option>
+      <option>Not started</option>
+      <option>Proposed out of scope</option>
+    </select>
+    <button class="tbtn primary" id="editBtn">✎ Edit table</button>
+    <button class="tbtn" id="addBtn" hidden>＋ Add tab</button>
+    <span class="spacer"></span>
+    <button class="tbtn" id="saveFileBtn" title="Download a copy of this page with your updates built in, ready to share">⬇ Download updated page</button>
+    <button class="tbtn" id="csvBtn">Export CSV</button>
+    <button class="tbtn ghost" id="resetBtn">Reset</button>
+  </div>
+  <div class="editbar">
+    <span id="saveState" class="note"></span>
+    <span id="editHint" class="note" hidden>Editing: click a status to cycle Not started → Pending validation → Complete → Not required · type in the notes box under each tab · your edits are kept when the dashboard is refreshed from the workbook</span>
+    <span id="saveWarn" class="note warn" hidden>This browser is blocking saves — use “Download updated page” to keep your changes.</span>
+  </div>
+  <div class="card" style="padding:0;overflow:auto">
+    <table id="pageTable">
+      <thead>
+        <tr class="grp"><th colspan="2"></th><th colspan="4" class="c">System mapping</th><th colspan="2" class="c">Documents &amp; other</th><th colspan="2"></th></tr>
+        <tr>
+        <th data-k="page">Policy App tab</th><th class="c" data-k="fields">Data elements</th>
+        <th class="c" data-k="V3">V3</th><th class="c" data-k="ESC">ESC</th><th class="c" data-k="CPM">CPM</th><th data-k="status">Status</th>
+        <th class="c" data-k="Contract">Contract</th><th class="c" data-k="MC">ManuConnect</th><th class="c" data-k="open">Open items</th><th></th>
+      </tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <p class="note"><span class="schip s-done">✓</span> Complete &nbsp; <span class="schip s-notreq">—</span> Not required &nbsp; <span class="schip s-partial">◐</span> Pending validation &nbsp; <span class="schip s-todo">○</span> Not started &nbsp; <span class="schip s-none">?</span> No status in workbook · Click a row for notes · click a column header to sort</p>
+  <p class="note"><span class="edmark">●</span> your edit (kept across dashboard updates) · <span class="chg">⚑</span> the workbook has changed since you edited this — hover to see the new value · <span class="openb">⚠ n</span> lines in the workbook still marked "needs validation" / TBD, or a status that doesn't match the field table — hover for details.</p>
+  <div class="card method">
+    <h3>How these numbers are worked out</h3>
+    <ul>
+      <li><strong>Status</strong> comes only from the System / Mapping Status block at the top of each tab in Policy App Mapping to Systems.xlsx — not from tab colours or my interpretation.</li>
+      <li><strong>Data elements</strong> are counted once per Policy App source cell on each tab (612 across the 12 MVP tabs), so a cell mapped to several systems is counted once.</li>
+      <li><strong>611 vs 612:</strong> 611 is the fillable-field count from the MVP Overview audit (used for scope percentages); 612 is the number of source cells listed in the mapping tabs (used for progress). They differ slightly because mapping splits or adds a few cells — e.g. EHCOOC lists 22 cells against 21 fillable fields.</li>
+      <li><strong>"Done" for a system</strong> = Complete or Not required. A tab is <em>Complete</em> for V3/ESC/CPM when all three are done; <em>Pending validation</em> when the rest is done but one says "completed first round, pending validation".</li>
+      <li><strong>Open items</strong> = field-table lines that still say "Needs SME validation", "Not validated", "Needs further review", "verification" or "TBD", plus any status that contradicts the field table (e.g. "Not required" with mappings recorded).</li>
+    </ul>
+  </div>
+</section>
+
+<!-- SESSIONS -->
+<section class="view" id="v-sessions">
+  <h2>What we're learning from the PDS SME mapping sessions</h2>
+  <div class="grid kpis">
+    <div class="card kpi"><div class="v">8</div><div class="l">mapping sessions summarized</div><div class="s">5 system (V3/ESC/CPM) · 2 contract · 1 ManuConnect</div></div>
+    <div class="card kpi"><div class="v">100</div><div class="l">action items captured</div><div class="s">66 system · 21 contract · 13 ManuConnect</div></div>
+  </div>
+
+  <div class="card" style="margin-block:14px">
+    <h3>Headline: this is not field-to-field mapping</h3>
+    <p>Every session reached the same conclusion — Policy App values don't map one-to-one to a downstream field. The QC tool has to handle several kinds of relationship:</p>
+    <div class="patterns">
+      <div><strong>Direct</strong><span>one Policy App value → one downstream field</span></div>
+      <div><strong>Derived</strong><span>several values combine to pick one code (GS Code, Travel Assist ID)</span></div>
+      <div><strong>One-to-many</strong><span>one value creates several records (visit count + dollar max)</span></div>
+      <div><strong>Guiding</strong><span>tells the coder what to do but isn't stored itself</span></div>
+      <div><strong>Expected absence</strong><span>an excluded service correctly has no record</span></div>
+      <div><strong>Comments</strong><span>exceptions live in free-text Additional Comments</span></div>
+      <div><strong>Lookup tables</strong><span>codes come from an external table (ETA Plan ID, Travel Assist ID)</span></div>
+      <div><strong>Wording presence</strong><span>in the contract, whole lines or paragraphs are kept, marked "not covered" or deleted</span></div>
+    </div>
+  </div>
+
+  <h3 class="track">ManuConnect mapping sessions</h3>
+  <div class="sessions">
+    <details class="card sess mc" open>
+      <summary><span class="sn">ManuConnect 1</span><span class="st">All EHC tabs → ManuConnect</span><span class="sd">Oct 22, 2026</span></summary>
+      <p class="note">SME: Sherri Holt · Target: Client Maintenance › Plans Offered › Plan Benefit Basic / Plan Benefit Option</p>
+      <h4>Key findings</h4><ul>
+        <li><strong>ManuConnect is a small, low-complexity target.</strong> Most EHC and drug plan design (deductibles, maximums, reimbursement, sliding scale) lives in ESC and claims systems, not MC.</li>
+        <li>Fields split and combine: waiting period becomes four MC fields; dependent definition becomes min/max age; two survivor extension fields become one.</li>
+        <li>Terminology differs ("present/future" in the Policy App = "current/new" in MC), and flex option names are inconsistent (01 / one / gold) — needs normalization.</li>
+        <li>Out of Country ETA Plan ID and Service Code come from an external lookup table.</li>
+        <li><strong>Real-world evidence:</strong> an external auditor found hospital co-insurance missing from a contract and booklet that morning — "This tool probably would have caught it."</li>
+        <li>Agreed out of MVP scope: rates (billing only), PPN, claims paying office.</li></ul>
+    </details>
+  </div>
+  <h3 class="track">Contract mapping sessions</h3>
+  <div class="sessions">
+    <details class="card sess contract" open>
+      <summary><span class="sn">Contract 2</span><span class="st">EHC Drug → contract</span><span class="sd">Oct 22, 2026</span></summary>
+      <p class="note">SME: Jeff Jones · Targets: Group Benefit Schedule, Extended Health Care drug benefit, Policy Addendum</p>
+      <h4>Key findings</h4><ul>
+        <li><strong>EHC Drug and EHC Drug Custom map identically</strong> — map once and copy.</li>
+        <li>Standard values usually mean <em>no</em> contract change; non-standard values trigger a targeted edit. QC must check both that text appears and that it doesn't.</li>
+        <li>Many fields roll into one line: Benefit Percentage (tier %, sliding scale, split brand/generic, dispensing-fee coinsurance) and eight maximum fields into "All other covered drug expenses".</li>
+        <li>Generic substitution wording is swapped wholesale from three model versions; a provincial formulary replaces the tier drug plan in both schedule and body.</li>
+        <li>9+ drug fields are administrative only (e.g. DIN, Prior Authorization, Virtual Pharmacy) and should be tagged "Not contractualized".</li>
+        <li><strong>Known audit exposure:</strong> preventative items coded "No" must be deleted from one section and added to the not-covered list.</li></ul>
+    </details>
+    <details class="card sess contract">
+      <summary><span class="sn">Contract 1</span><span class="st">EHC &amp; Orthopaedic → contract</span><span class="sd">Oct 20, 2026</span></summary>
+      <p class="note">SME: Jeff Jones · Targets: Group Benefits Schedule, Definitions, Extended Health Care benefit wording</p>
+      <h4>Key findings</h4><ul>
+        <li><strong>Policy App-to-contract QC is viable.</strong> Contracts are drafted from standard models, so wording outside the variables stays the same.</li>
+        <li>QC has to check that wording is <em>present, marked "not covered", or removed</em> — not just that values match.</li>
+        <li>Coverage is judged across all plans: if no plan covers a benefit the line is deleted; if some do, the line stays with "not covered" for the others.</li>
+        <li>Several fields combine into one sentence (termination age; overall maximum), and some fields appear in two places (Survivor Extended).</li>
+        <li>"Deductible applies" works by exception — the contract states the default and only lists what the deductible does not apply to.</li>
+        <li>Unresolved: retiree accumulation and maximum-reset wording. Drugs and Professional Services are expected to be more complex.</li></ul>
+    </details>
+  </div>
+  <h3 class="track">System mapping sessions (V3, ESC, CPM)</h3>
+  <div class="sessions">
+    <details class="card sess">
+      <summary><span class="sn">Session 5</span><span class="st">PPN &amp; EHC Drug Step Therapy</span><span class="sd">Oct 15, 2026</span></summary>
+      <p class="note">Primary systems: ESC (GS Profile / Group Profile, GSAS), CPM</p>
+      <h4>Key findings</h4><ul>
+        <li><strong>Preferred Provider (PPN) proposed out of scope</strong> — set-up varies by pharmacy, chain and location, needs dedicated ESC benefit codes, and relies heavily on Additional Comments and supporting documents.</li>
+        <li>Step Therapy is a stronger candidate for rule-driven QC: it can be set at group or plan level, with drug modules, provinces and effective dates each creating records.</li>
+        <li>Standard cognitive-fee treatment means <em>no</em> GSAS override; non-standard needs a GSAS exception plus a QMID from separate reference data.</li>
+        <li>CPM holds relatively clear Step Therapy indicators (sold? Plan Member Guide applies?).</li>
+        <li>"Overall EHC deductible applies" is a routing rule — Yes means inherit the EHC set-up, No means code a separate drug deductible.</li></ul>
+    </details>
+    <details class="card sess">
+      <summary><span class="sn">Session 4</span><span class="st">Out of Country (EHCOOC)</span><span class="sd">Oct 14, 2026</span></summary>
+      <p class="note">Primary system: V3 (Parameters, Limits, Benefits, Categories/TOSS)</p>
+      <h4>Key findings</h4><ul>
+        <li>Travel Assist ID is derived from several Policy App answers — and was in the input file but <strong>not visible in the V3 screens reviewed</strong>.</li>
+        <li>Referral and emergency coverage need separate TOSS/category set-ups with their own coinsurance, maximum and period.</li>
+        <li>Standard service codes are defaulted; deviations come through Additional Comments.</li>
+        <li>Trip-duration options are mutually exclusive — a clean, automatable source-validation rule.</li></ul>
+    </details>
+    <details class="card sess">
+      <summary><span class="sn">Session 3</span><span class="st">Professional Services (EHCProfServ)</span><span class="sd">Oct 13, 2026</span></summary>
+      <p class="note">Primary system: V3 (Payments, Limits, Set up / Rule Sets); one CPM brochure item</p>
+      <h4>Key findings</h4><ul>
+        <li>V3 / data lake configuration — not the coding input file — should be the QC comparison point.</li>
+        <li>~130 entry points may collapse into ~10 reusable V3 patterns; a strong candidate for a reusable mapping template.</li>
+        <li>Combined maximums, visit count vs. dollar max, and initial vs. subsequent visits each need relationship-level checks.</li>
+        <li>"No downstream record" can be the correct result for excluded or guiding fields.</li></ul>
+    </details>
+    <details class="card sess">
+      <summary><span class="sn">Session 2</span><span class="st">EHC &amp; EHC Drug</span><span class="sd">Oct 8, 2026</span></summary>
+      <p class="note">Primary systems: ESC, V3, CPM</p>
+      <h4>Key findings</h4><ul>
+        <li>Sliding coinsurance is a composite rule (rate, breakpoint, type, applicability work together).</li>
+        <li>Some Policy App fields are instructions to the coder, not stored values.</li>
+        <li>Standard vs. non-standard drives everything — exceptions are deviations from a standard plan.</li>
+        <li>QC must check maximum <em>placement and basis</em>, not just the amount.</li></ul>
+    </details>
+    <details class="card sess">
+      <summary><span class="sn">Session 1</span><span class="st">EHC Drug, General EHC, EHC Hospital</span><span class="sd">Date not recorded</span></summary>
+      <p class="note">Primary systems: ESC (GS Profile, GS Code, Benefit Parameter Table, LDF, SDC), V3</p>
+      <h4>Key findings</h4><ul>
+        <li>Drug-plan / GS Code selection is derived from several Policy App values.</li>
+        <li>Brand vs. generic is embedded in the GS Code format (a "G" prefix = generic).</li>
+        <li>Drug deductible can inherit the overall EHC deductible — a cross-tab dependency.</li>
+        <li>Province (RAMQ, formulary, SDC, LDF) materially changes configuration.</li></ul>
+    </details>
+  </div>
+  <p class="note">Sources: SME Meetings - Mapping folder — Policy App Mapping - V3_ESC_CPM.docx, Policy App Mapping - Contract.docx, and the Oct 22 Drug Tab to Contract (Jeff Jones) and Policy App to ManuConnect (Sherri Holt) summaries. Speaker attribution in the transcripts is limited, so findings are reported as session outcomes rather than attributed to individuals.</p>
+</section>
+
+<!-- NEXT -->
+<section class="view" id="v-next">
+  <h2>Watch items &amp; next steps</h2>
+  <div class="card">
+    <ul class="watch">
+      <li><strong>Scope is locked for the MVP:</strong> EHC/Drug tabs only — 12 tabs, 611 fields, 25.3% of the 2,416 in-scope fields across 40 tabs.</li>
+      <li><strong>V3, ESC &amp; CPM:</strong> 6 tabs complete; EHCHosp and EHCOOC are pending V3 validation; EHCVision, EHCOrthop and EHCMisc not started (167 elements). EHC Miscellaneous may need a replacement SME.</li>
+      <li><strong>Contract:</strong> 4 of 12 tabs complete (EHC, EHCDrug, EHCDrugCustom, EHCOrthop). Next session early next week for the remaining tabs; tag administrative-only fields "Not contractualized"; get the model wording for generic substitution and the SDC disclaimer.</li>
+      <li><strong>ManuConnect:</strong> done for all 12 tabs (4 mapped, 8 not coded in MC). Follow-ups: capture flex options from the plan structure, obtain the ETA lookup table, validate the Mandatory/Optional benefit direction.</li>
+      <li><strong>Booklet:</strong> decide whether to map it or leverage the contract/booklet initiative.</li>
+      <li><strong>Use the showcase examples with leadership:</strong> the hospital co-insurance gap found by an external auditor, and the preventative drug "No" contradiction.</li>
+      <li><strong>Decide on PPN scope.</strong> Mapping proposes moving Preferred Provider out of scope. If approved: 11 tabs / 579 fields (24.0% of in-scope fields).</li>
+      <li><strong>Check one status mismatch:</strong> EHCDrug CPM is "Not required" but 5 CPM locations are recorded in its field table. (EHCDrugStepTherapy is now consistent — its 2 CPM rows were added.)</li>
+      <li><strong>Add source cells</strong> to the CPM rows on EHCOOC (2) and EHCDrugStepTherapy (2) and one ManuConnect row on EHCOOC, so they can be traced back to a Policy App cell.</li>
+      <li><strong>Clear open notes:</strong> EHC (16 lines) and EHCHosp (5) still say "Needs SME validation"; EHCOOC has 3 lines flagged for verification; Drug Deductible and Virtual Pharmacy are still TBD on EHCDrug and EHCDrugCustom.</li>
+      <li><strong>Refresh the Validation Summary tab</strong> — it still shows old counts for EHCDrugCustom (88), EHCProfServ (129) and EHCOOC (21).</li>
+      <li><strong>Flag overpayment exposure to Jason Reid</strong> — missed service exclusions (Session 4 action).</li>
+      <li><strong>Assign a phase</strong> to GPM, Entitlements and Med One.</li>
+      <li><strong>Hand off to Architecture</strong> confirmed system / screen / field locations for Data Lake mapping.</li>
+    </ul>
+  </div>
+</section>
+
+<footer>Prepared for Group Benefits leadership · Configurable QC working group · Figures taken directly from the mapping workbook; no values estimated.</footer>
+</div>
+
+<script type="application/json" id="pageData"></script>
+<script>
+(function(){
+  const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+  // view tabs
+  $$('#tabs button').forEach(b=>b.addEventListener('click',()=>{
+    $$('#tabs button').forEach(x=>x.classList.toggle('active',x===b));
+    $$('section.view').forEach(v=>v.classList.toggle('active',v.id===b.dataset.view));
+  }));
+  // donut
+  const donut=$('#donut');
+  const modes={cells:{pct:611/2416,lab:'25.3%',sub:'611 / 2,416 fields'},tabs:{pct:12/40,lab:'30.0%',sub:'12 / 40 tabs'}};
+  function setDonut(m){const d=modes[m];const deg=(d.pct*360).toFixed(1);
+    donut.style.background=`conic-gradient(var(--teal) 0deg ${deg}deg, var(--soft-grey) ${deg}deg 360deg)`;
+    $('#donutLabel').firstChild.nodeValue=d.lab; $('#donutSub').textContent=d.sub;}
+  setDonut('cells');
+  $$('#donutToggle button').forEach(b=>b.addEventListener('click',()=>{$$('#donutToggle button').forEach(x=>x.classList.toggle('active',x===b));setDonut(b.dataset.mode);}));
+  // bars
+  const cells=[['EHCProfServ',130],['EHCDrug',90],['EHCDrugCustom',90],['EHCMisc',72],['EHCVision',57],['EHCOrthop',38],['EHC',33],['PPN',32],['EHCDrugStepTherapy',23],['EHCOOC',21],['EHCHosp',20],['EHC ESCPharmacy',5]];
+  const max=130, bars=$('#cellBars');
+  cells.forEach(([n,v,w])=>{const r=document.createElement('div');r.className='row';
+    r.innerHTML=`<span>${n}</span><div class="track"><div class="fill${w?' warn':''}" style="width:0"></div></div><span class="num">${v}</span>`;
+    bars.appendChild(r); requestAnimationFrame(()=>{r.querySelector('.fill').style.width=(v/max*100)+'%';});});
+  const tot=document.createElement('div');tot.className='row';tot.innerHTML='<strong>Total MVP</strong><span></span><span class="num">611</span>';bars.appendChild(tot);
+  // tab groups
+  const groups={'MVP':['EHC','EHCDrug','PPN','EHCHosp','EHCDrugCustom','EHCVision','EHCOOC','EHCOrthop','EHCProfServ','EHCMisc','EHCDrugStepTherapy','EHC ESCPharmacy'],
+    'Later Phase':['BasicLife','OptlLife','DLife','DOptlLife','ADD','BTA','OptlADD','VAD','ADDDetails','STA','LTD','Dental','HCSA & LSA','Cost Plus','EFAP',"Women's & Family Health",'MSO','Basic Critical Illness','Member Opt Critical Illness','Dep Optional Critical Illness','Personal Benefits','Short Term Absence Solutions','Healthcare Online','FinTitle','FinUnd','NEAR','BenCostShr','ComComp'],
+    'N/A':['MainTitle','PlanSpConInfo','BenTitle','AdminTitle','GenEnInfo','BillClAdm','TranBen','AffCoInfo','Sales Tax Form','DecAuth','Receipt','EAPA','High Risk Plan Designs','ClientChangeLog'],
+    'Information only':['Direct Drug Variations']};
+  const fc={'MVP':'611','Later Phase':'1,805'};
+  function renderGroups(f){const box=$('#tabGroups');box.innerHTML='';
+    Object.entries(groups).forEach(([g,list])=>{if(f!=='all'&&f!==g)return;
+      const cls=g==='MVP'?'mvp':g==='Later Phase'?'later':'';
+      const d=document.createElement('div');d.style.marginBlockEnd='14px';
+      d.innerHTML=`<h3>${g} <span class="note">(${list.length} tabs${fc[g]?' · '+fc[g]+' fields':''})</span></h3><div class="chips">${list.map(t=>`<span class="chip ${cls}">${t.replace(/&/g,'&amp;')}</span>`).join('')}</div>`;
+      box.appendChild(d);});}
+  renderGroups('all');
+  $$('#phaseFilter button').forEach(b=>b.addEventListener('click',()=>{$$('#phaseFilter button').forEach(x=>x.classList.toggle('active',x===b));renderGroups(b.dataset.p);}));
+  // systems
+  const sys=[['Policy App','mvp','Source of truth'],['V3','mvp','Complete: EHC, EHCDrug, EHCDrugCustom, EHCProfServ · pending validation: EHCHosp, EHCOOC · not required: Step Therapy, ESC Pharmacy, PPN'],['ESC','mvp','Complete: EHC, EHCDrug, EHCDrugCustom, Step Therapy · not required: EHCHosp, EHCOOC, EHCProfServ, ESC Pharmacy'],['CPM','mvp','Complete: EHCDrugCustom, EHCOOC, EHCProfServ, Step Therapy · not required: EHC, EHCDrug, EHCHosp, ESC Pharmacy'],['ManuConnect (MC)','mvp','Mapped Oct 22 with Sherri Holt. Complete: EHC, EHCDrug, EHCDrugCustom, EHCOOC · not coded in MC for the other 8 tabs'],['Contract','mvp','Complete: EHC, EHCDrug, EHCDrugCustom, EHCOrthop · 8 tabs to go'],['Booklet','mvp','Not yet tracked — decision pending on mapping it vs leveraging the contract/booklet initiative'],
+    ['Navigator','later',''],['BAAG','later',''],['AIM','later',''],['Opera','later',''],['Benefit Detail Tool','later',''],
+    ['Clients II (CII)','no','Marked "N/A"'],['DIL','no','Marked "N/A"'],['GPM','tbd','Column only, no phase'],['Entitlements','tbd','Column only, no phase'],['Med One','tbd','Column only, no phase']];
+  const lab={mvp:'MVP',later:'Later Phase',no:'Not in scope',tbd:'No phase assigned'};
+  function renderSys(f){const box=$('#sysCards');box.innerHTML='';
+    sys.filter(s=>f==='all'||s[1]===f).forEach(([n,p,note])=>{const c=document.createElement('div');c.className='card';
+      c.innerHTML=`<div class="tag ${p}">${lab[p]}</div><div style="font-weight:700;font-size:16px;margin-block:4px">${n}</div><div class="note">${note}</div>`;box.appendChild(c);});}
+  renderSys('all');
+  $$('#sysFilter button').forEach(b=>b.addEventListener('click',()=>{$$('#sysFilter button').forEach(x=>x.classList.toggle('active',x===b));renderSys(b.dataset.p);}));
+  // mapping status table
+  const BASE=[{"page": "EHC", "fields": 32, "V3": "done", "ESC": "done", "CPM": "notreq", "Contract": "done", "MC": "done", "oos": false, "open": {"V3": 8, "ESC": 8}, "checks": [], "detail": "<strong>V3 &amp; ESC<\/strong> — 15 V3 and 16 ESC lines located (V3: PBO Details/Set up, Parameters, Limits, Payments · ESC: GS Profile, GS Cov, Benefit Code, Benefit Parameter table); 7 derived through ManuConnect logic.<br><strong>Contract<\/strong> — all 32 elements located (Group Benefits Schedule, Definitions, benefit wording).<br><strong>ManuConnect<\/strong> — Client Maintenance › Plans Offered › Plan Benefit Basic/Option; 12 elements coded in MC (waiting period splits into four MC fields; dependent definition into min/max age), 20 not coded in MC.<br><strong>Open notes:<\/strong> 8 V3 and 8 ESC lines still say \"Needs SME validation\"."}, {"page": "EHCDrug", "fields": 89, "V3": "done", "ESC": "done", "CPM": "notreq", "Contract": "done", "MC": "done", "oos": false, "open": {"ESC": 2}, "checks": ["CPM is marked \"Not required\" but 5 elements have a CPM location in the field table"], "detail": "<strong>ESC<\/strong> — 86 elements (GS Profile, GS Cov, Benefit Parameter table, SDC program, exceptions). <strong>V3<\/strong> — 5 (Drug component parameter).<br><strong>Contract<\/strong> — mapped Oct 22 with Jeff Jones: Group Benefit Schedule and Extended Health Care drug benefit. Many fields roll up into one line (Benefit Percentage; \"All other covered drug expenses\"); 9+ fields are administrative only and not in the contract.<br><strong>ManuConnect<\/strong> — 3 elements coded (pay direct drives the drug card fields); the rest not coded in MC. Workbook note: flex option needs capturing from the plan structure.<br><strong>Open notes:<\/strong> Drug Deductible and Virtual Pharmacy still TBD."}, {"page": "PPN", "fields": 32, "V3": "notreq", "ESC": "none", "CPM": "none", "Contract": "none", "MC": "notreq", "oos": true, "open": {}, "checks": [], "detail": "Proposed out of scope (workbook note). V3 not required; ManuConnect marked n/a. CPM, ESC and Contract statuses are blank. SME sessions: Preferred Provider set-up varies by pharmacy, chain and location and relies on Additional Comments; it is coded in ManuConnect but kept out of scope."}, {"page": "EHCHosp", "fields": 19, "V3": "partial", "ESC": "notreq", "CPM": "notreq", "Contract": "todo", "MC": "notreq", "oos": false, "open": {"V3": 5}, "checks": [], "detail": "<strong>V3<\/strong> — completed first round, pending some validations: 13 lines located (Parameters (HOSP), Payments, Limits); 5 still say \"Needs SME validation\".<br><strong>ManuConnect<\/strong> — not required.<br>Hospital co-insurance is the field an external auditor found missing from a contract and booklet (Oct 22)."}, {"page": "EHCDrugCustom", "fields": 89, "V3": "done", "ESC": "done", "CPM": "done", "Contract": "done", "MC": "done", "oos": false, "open": {"ESC": 2}, "checks": [], "detail": "Treated as a copy of EHCDrug — both SMEs confirmed the coded inputs are identical.<br><strong>ESC<\/strong> — 87 elements. <strong>V3<\/strong> — 5. <strong>CPM<\/strong> — 5 (Plan Member Site, PA Site, Forms / Brochures).<br><strong>Contract &amp; ManuConnect<\/strong> — complete, copied from EHCDrug.<br><strong>Open notes:<\/strong> Drug Deductible and Virtual Pharmacy still TBD."}, {"page": "EHCVision", "fields": 56, "V3": "todo", "ESC": "todo", "CPM": "todo", "Contract": "todo", "MC": "notreq", "oos": false, "open": {}, "checks": [], "detail": "V3, ESC, CPM and Contract not started. ManuConnect — not required."}, {"page": "EHCOOC", "fields": 22, "V3": "partial", "ESC": "notreq", "CPM": "done", "Contract": "todo", "MC": "done", "oos": false, "open": {"V3": 3}, "checks": [], "detail": "<strong>V3<\/strong> — completed first round, pending further validation: 12 elements on the Limits and Parameters tabs; 3 lines flagged for verification.<br><strong>CPM<\/strong> — Emergency Travel Assistance brochure (rows have no Policy App source cell recorded).<br><strong>ManuConnect<\/strong> — complete. ETA Plan ID and ETA Service Code are looked up from an external table, not coded directly; workbook note: \"deep dive required if we want to include this\"."}, {"page": "EHCOrthop", "fields": 37, "V3": "todo", "ESC": "todo", "CPM": "todo", "Contract": "done", "MC": "notreq", "oos": false, "open": {}, "checks": [], "detail": "<strong>Contract<\/strong> — all 37 elements located: Group Benefits Schedule 29 lines, free-format notes 5, 4 marked out of scope.<br><strong>ManuConnect<\/strong> — not coded in MC.<br><strong>V3, ESC, CPM<\/strong> — not started."}, {"page": "EHCProfServ", "fields": 136, "V3": "done", "ESC": "notreq", "CPM": "done", "Contract": "todo", "MC": "notreq", "oos": false, "open": {}, "checks": [], "detail": "<strong>V3<\/strong> — 131 elements (Limits, Payments, Set up / Rule Sets e.g. RS-EHC-9). <strong>CPM<\/strong> — R&amp;C Paramedicals brochure. 4 guiding cells have no system (expected).<br><strong>ManuConnect<\/strong> — not required."}, {"page": "EHCMisc", "fields": 74, "V3": "todo", "ESC": "todo", "CPM": "todo", "Contract": "todo", "MC": "notreq", "oos": false, "open": {}, "checks": [], "detail": "V3, ESC, CPM and Contract not started. ManuConnect — not required. SME Session 5 noted it may need a replacement SME."}, {"page": "EHCDrugStepTherapy", "fields": 22, "V3": "notreq", "ESC": "done", "CPM": "done", "Contract": "todo", "MC": "notreq", "oos": false, "open": {}, "checks": [], "detail": "<strong>ESC<\/strong> — 21 elements (GS Profile Step Therapy button; cognitive fees = GSAS or no code).<br><strong>CPM<\/strong> — Admin site: Step Therapy program sold; Forms / Brochures: Step Therapy plan member guide (2 rows, no Policy App source cell recorded). ManuConnect — not required."}, {"page": "EHC ESCPharmacy", "fields": 4, "V3": "notreq", "ESC": "notreq", "CPM": "notreq", "Contract": "todo", "MC": "notreq", "oos": false, "open": {}, "checks": [], "detail": "Reviewed — no coding required in V3, CPM, ESC or ManuConnect. Contract not started."}];
+  const BASE_AS_OF="Oct 22, 2026, 3:00 PM";
+
+  const SYS=['V3','ESC','CPM','Contract','MC'];
+  const FIELDS=['fields','V3','ESC','CPM','Contract','MC','oos','detail'];
+  const SYSLAB={V3:'V3',ESC:'ESC',CPM:'CPM',Contract:'Contract',MC:'ManuConnect'};
+  const ST={done:'Complete',notreq:'Not required',partial:'Pending validation',todo:'Not started',none:'No status'};
+  const ICON={done:'✓',notreq:'—',partial:'◐',todo:'○',none:'?'};
+  const ORDER=['done','notreq','partial','todo','none'];
+  const CYCLE={todo:'partial',partial:'done',done:'notreq',notreq:'todo',none:'todo'};
+  const OVERALL=['Complete','Pending validation','In progress','Not started','Proposed out of scope'];
+  const OBADGE={'Complete':'b-done','Pending validation':'b-prog','In progress':'b-map','Not started':'b-not','Proposed out of scope':'b-oos'};
+  const KEY='cqc_mvp_edits';            // fixed: never changes between updates
+  const LEGACY='cqc_mvp_mapping_status_v8';
+  const esc=t=>String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const clone=o=>JSON.parse(JSON.stringify(o));
+  const isDone=v=>v==='done'||v==='notreq';
+  const baseOf=page=>BASE.find(b=>b.page===page);
+  function overall(p){
+    if(p.oos) return 'Proposed out of scope';
+    const v=['V3','ESC','CPM'].map(k=>p[k]);
+    if(v.every(isDone)) return 'Complete';
+    if(v.every(x=>isDone(x)||x==='partial')) return 'Pending validation';
+    if(v.some(x=>x!=='todo'&&x!=='none')) return 'In progress';
+    return 'Not started';
+  }
+  const openCount=p=>Object.values(p.open||{}).reduce((a,b)=>a+b,0);
+
+  // ---- edits are stored as overrides on top of the workbook baseline ----
+  // edits[page][field] = {v: user value, b: workbook value when edited, at: time}
+  function emptyEdits(){return {v:2,savedAt:'',edits:{},added:[],removed:[]};}
+  function migrateLegacy(){
+    try{const old=JSON.parse(localStorage.getItem(LEGACY)||'null'); if(!old||!old.rows) return null;
+      const e=emptyEdits(); e.savedAt=old.savedAt||'';
+      old.rows.forEach(r=>{const b=baseOf(r.page); if(!b){e.added.push(r);return;}
+        FIELDS.forEach(f=>{if(f in r && JSON.stringify(r[f])!==JSON.stringify(b[f])){(e.edits[r.page]=e.edits[r.page]||{})[f]={v:r[f],b:b[f],at:e.savedAt};}});});
+      BASE.forEach(b=>{if(!old.rows.some(r=>r.page===b.page)) e.removed.push(b.page);});
+      return e;}catch(x){return null;}
+  }
+  let baked=null; try{const t=$('#pageData').textContent.trim(); if(t){const j=JSON.parse(t); if(j&&j.v===2) baked=j;}}catch(e){}
+  let stored=null; try{stored=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){}
+  if(!stored){stored=migrateLegacy(); if(stored){try{localStorage.setItem(KEY,JSON.stringify(stored));}catch(e){}}}
+  let E=(stored && (!baked || (stored.savedAt||'')>=(baked.savedAt||''))) ? stored : (baked || emptyEdits());
+  E.edits=E.edits||{}; E.added=E.added||[]; E.removed=E.removed||[];
+
+  function effective(){
+    const rows=BASE.filter(b=>!E.removed.includes(b.page)).map(b=>{const r=clone(b); const ed=E.edits[b.page]||{};
+      r._edited={}; r._changed={};
+      Object.entries(ed).forEach(([f,o])=>{r[f]=o.v; r._edited[f]=true; if(JSON.stringify(o.b)!==JSON.stringify(b[f])) r._changed[f]=b[f];});
+      return r;});
+    E.added.forEach(a=>{const r=clone(a); r._added=true; r._edited={}; r._changed={}; rows.push(r);});
+    return rows;
+  }
+  let pages=effective();
+  function setField(p,f,val){
+    if(p._added){const a=E.added.find(x=>x.page===p.page); if(a) a[f]=val;}
+    else{const b=baseOf(p.page); const ed=(E.edits[p.page]=E.edits[p.page]||{});
+      if(JSON.stringify(val)===JSON.stringify(b[f])) delete ed[f]; else ed[f]={v:val,b:b[f],at:new Date().toISOString()};
+      if(!Object.keys(ed).length) delete E.edits[p.page];}
+    save();
+  }
+  function save(){E.savedAt=new Date().toISOString();
+    try{localStorage.setItem(KEY,JSON.stringify(E)); $('#saveWarn').hidden=true;}catch(e){$('#saveWarn').hidden=false;}
+    pages=effective(); stamp(); renderSummary();}
+  function editCount(){return Object.values(E.edits).reduce((a,o)=>a+Object.keys(o).length,0)+E.added.length+E.removed.length;}
+  function stamp(){const n=editCount();
+    $('#saveState').innerHTML=`Workbook data as of ${BASE_AS_OF}`+(n?` · <strong>${n} of your edit${n>1?'s':''} applied</strong> (last ${new Date(E.savedAt).toLocaleString([], {dateStyle:'medium',timeStyle:'short'})}) — edited cells are marked <span class="edmark">●</span>`:' · no edits')+
+      (pages.some(p=>Object.keys(p._changed).length)?' · <span class="chg">⚑ the workbook has changed since some of your edits — hover the flag to compare</span>':'');}
+
+  function sysBars(){
+    const n=pages.length;
+    return SYS.map(k=>{
+      const c={}; ORDER.forEach(s=>c[s]=0); pages.forEach(p=>c[p[k]]=(c[p[k]]||0)+1);
+      const segs=ORDER.filter(s=>c[s]).map(s=>`<div class="sseg s-${s}" style="width:${c[s]/n*100}%" title="${ST[s]}: ${c[s]} tab${c[s]>1?'s':''}">${c[s]}</div>`).join('');
+      return `<div class="srow"><span class="sname">${SYSLAB[k]}</span><div class="sstack">${segs}</div><span class="sdone">${c.done+c.notreq} / ${n}</span></div>`;
+    }).join('')+`<div class="slegend">${ORDER.map(s=>`<span><i class="sdot s-${s}"></i>${ST[s]}</span>`).join('')}</div>`;
+  }
+  function renderSummary(){
+    const by={}; OVERALL.forEach(s=>by[s]=0); pages.forEach(p=>by[overall(p)]++);
+    const tot=pages.reduce((a,p)=>a+(+p.fields||0),0);
+    const elOf=s=>pages.filter(p=>overall(p)===s).reduce((a,p)=>a+(+p.fields||0),0);
+    const k=s=>pages.filter(p=>isDone(p[s])).length;
+    const on=pages.reduce((a,p)=>a+openCount(p),0), ck=pages.reduce((a,p)=>a+(p.checks||[]).length,0);
+    const tiles=
+      `<div class="card kpi"><div class="v">${by['Complete']} of ${pages.length}</div><div class="l">tabs complete for V3, ESC &amp; CPM</div><div class="s">${elOf('Complete')} of ${tot} data elements</div></div>`+
+      `<div class="card kpi"><div class="v">${by['Pending validation']}</div><div class="l">tabs pending validation</div><div class="s">${pages.filter(p=>overall(p)==='Pending validation').map(p=>esc(p.page)).join(', ')||'—'}</div></div>`+
+      `<div class="card kpi"><div class="v">${k('Contract')} of ${pages.length}</div><div class="l">tabs mapped to the contract</div><div class="s">${pages.filter(p=>p.Contract==='done').map(p=>esc(p.page)).join(', ')||'—'}</div></div>`+
+      `<div class="card kpi"><div class="v">${k('MC')} of ${pages.length}</div><div class="l">tabs done for ManuConnect</div><div class="s">${pages.filter(p=>p.MC==='done').length} mapped · ${pages.filter(p=>p.MC==='notreq').length} not coded in MC</div></div>`+
+      `<div class="card kpi"><div class="v">${on+ck}</div><div class="l">open items in the workbook</div><div class="s">${on} lines still marked "needs validation" / TBD · ${ck} status check${ck===1?'':'s'}</div></div>`;
+    $$('.statusTiles').forEach(x=>x.innerHTML=tiles);
+    $$('.sysStatus').forEach(x=>x.innerHTML=sysBars());
+  }
+
+  let editing=false, sortK=null, sortDir=1, openRows=new Set();
+  function marks(p,f){
+    let m='';
+    if(p._edited&&p._edited[f]) m+='<span class="edmark" title="Your edit">●</span>';
+    if(p._changed&&f in p._changed){const bv=p._changed[f]; m+=`<span class="chg" title="Workbook now says: ${esc(ST[bv]||bv)}">⚑</span>`;}
+    return m;
+  }
+  function cell(p,k){
+    const v=p[k]||'none';
+    if(editing) return `<td class="c"><button class="schip s-${v} cyc" data-k="${k}" title="${SYSLAB[k]}: ${ST[v]} — click to change">${ICON[v]}</button>${marks(p,k)}</td>`;
+    return `<td class="c"><span class="schip s-${v}" title="${SYSLAB[k]}: ${ST[v]}">${ICON[v]}</span>${marks(p,k)}</td>`;
+  }
+  function openCell(p){
+    const n=openCount(p), c=(p.checks||[]).length;
+    if(!n&&!c) return '<td class="c note">—</td>';
+    const t=[...Object.entries(p.open||{}).map(([s,x])=>`${SYSLAB[s]||s}: ${x} line${x>1?'s':''} needing validation / TBD`),...(p.checks||[])].join('\n');
+    return `<td class="c"><span class="openb" title="${esc(t)}">⚠ ${n+c}</span></td>`;
+  }
+  function renderTable(){
+    const q=$('#search').value.toLowerCase(), st=$('#statusSel').value;
+    let rows=pages.map((p,i)=>({p,i})).filter(({p})=>p.page.toLowerCase().includes(q)&&(!st||overall(p)===st));
+    const rk=v=>({done:4,notreq:3,partial:2,todo:1,none:0}[v]??0);
+    if(sortK){rows.sort((a,b)=>{let x,y;
+      if(SYS.includes(sortK)){x=rk(a.p[sortK]);y=rk(b.p[sortK]);}
+      else if(sortK==='status'){x=OVERALL.indexOf(overall(a.p));y=OVERALL.indexOf(overall(b.p));}
+      else if(sortK==='open'){x=openCount(a.p)+(a.p.checks||[]).length;y=openCount(b.p)+(b.p.checks||[]).length;}
+      else if(sortK==='fields'){x=+a.p.fields;y=+b.p.fields;} else {x=a.p.page;y=b.p.page;}
+      return (x>y?1:x<y?-1:0)*sortDir;});}
+    const tb=$('#pageTable tbody');tb.innerHTML='';
+    $('#pageTable').classList.toggle('editing',editing);
+    rows.forEach(({p,i})=>{
+      const o=overall(p);
+      const tr=document.createElement('tr');tr.className='main';
+      const ov=`<td><span class="badge ${OBADGE[o]}">${o}</span>${marks(p,'oos')}</td>`;
+      if(editing){
+        tr.innerHTML=`<td><strong>${esc(p.page)}</strong>${p._added?' <span class="note">(added)</span>':''}</td><td class="c"><input class="ed-num" type="number" min="0" value="${esc(p.fields)}" aria-label="Fields">${marks(p,'fields')}</td>`+
+          ['V3','ESC','CPM'].map(k=>cell(p,k)).join('')+ov+cell(p,'Contract')+cell(p,'MC')+openCell(p)+
+          `<td class="c"><label class="oosl"><input type="checkbox" class="ed-oos"${p.oos?' checked':''}> out of scope</label> <button class="rowdel" title="Remove this tab">✕</button></td>`;
+        tr.querySelector('.ed-num').addEventListener('change',e=>{setField(p,'fields',Math.max(0,parseInt(e.target.value||'0',10)));renderTable();});
+        tr.querySelector('.ed-oos').addEventListener('change',e=>{setField(p,'oos',e.target.checked);renderTable();});
+        tr.querySelectorAll('.cyc').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();const k=b.dataset.k;setField(p,k,CYCLE[p[k]||'none']);renderTable();}));
+        tr.querySelector('.rowdel').addEventListener('click',()=>{if(!confirm('Remove '+p.page+' from the table?'))return;
+          if(p._added){E.added=E.added.filter(x=>x.page!==p.page);} else {E.removed.push(p.page); delete E.edits[p.page];}
+          save();renderTable();});
+      }else{
+        tr.innerHTML=`<td><strong>${esc(p.page)}</strong></td><td class="c">${esc(p.fields)}${marks(p,'fields')}</td>`+['V3','ESC','CPM'].map(k=>cell(p,k)).join('')+ov+cell(p,'Contract')+cell(p,'MC')+openCell(p)+`<td></td>`;
+      }
+      const dt=document.createElement('tr');dt.className='detail'+((editing||openRows.has(p.page))?' open':'');
+      const chk=(p.checks||[]).length?`<div class="chkline">⚠ ${p.checks.map(esc).join('<br>⚠ ')}</div>`:'';
+      if(editing){
+        dt.innerHTML=`<td colspan="10"><div class="ed-detail" contenteditable="true" aria-label="Notes for ${esc(p.page)}">${p.detail}</div>${chk}</td>`;
+        dt.querySelector('.ed-detail').addEventListener('blur',e=>{if(e.target.innerHTML!==p.detail) setField(p,'detail',e.target.innerHTML);});
+      }else{
+        dt.innerHTML=`<td colspan="10">${p.detail}${marks(p,'detail')}${chk}</td>`;
+        tr.addEventListener('click',()=>{dt.classList.toggle('open');openRows.has(p.page)?openRows.delete(p.page):openRows.add(p.page);});
+      }
+      tb.appendChild(tr);tb.appendChild(dt);});
+  }
+
+  $('#editBtn').addEventListener('click',()=>{editing=!editing;
+    $('#editBtn').textContent=editing?'✓ Done editing':'✎ Edit table';$('#editBtn').classList.toggle('on',editing);
+    $('#addBtn').hidden=!editing;$('#editHint').hidden=!editing;renderTable();});
+  $('#addBtn').addEventListener('click',()=>{const n=(prompt('Policy App tab name')||'').trim();if(!n)return;
+    if(pages.some(p=>p.page===n)){alert(n+' is already in the table.');return;}
+    E.added.push({page:n,fields:0,V3:'todo',ESC:'todo',CPM:'todo',Contract:'todo',MC:'todo',oos:false,open:{},checks:[],detail:'Add notes here.'});save();renderTable();});
+  $('#resetBtn').addEventListener('click',()=>{if(!confirm('Discard all of your edits and show the workbook data only?'))return;
+    E=emptyEdits(); try{localStorage.setItem(KEY,JSON.stringify(E));}catch(e){} pages=effective();stamp();renderSummary();renderTable();});
+  $('#csvBtn').addEventListener('click',()=>{
+    const tmp=document.createElement('div');
+    const lines=[['Policy App tab','Data elements','V3','ESC','CPM','V3/ESC/CPM status','Contract','ManuConnect','Open items','Your edits','Notes'].join(',')].concat(pages.map(p=>{tmp.innerHTML=String(p.detail).replace(/<br\s*\/?>/gi,' | ');
+      return [p.page,p.fields,ST[p.V3],ST[p.ESC],ST[p.CPM],overall(p),ST[p.Contract],ST[p.MC],openCount(p)+(p.checks||[]).length,Object.keys(p._edited||{}).join(' ')||(p._added?'added':''),tmp.textContent].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',');}));
+    dl(new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv'}),'Mapping_Status_by_Tab.csv');});
+  $('#saveFileBtn').addEventListener('click',()=>{
+    if(!E.savedAt) E.savedAt=new Date().toISOString();
+    const doc=document.documentElement.cloneNode(true);
+    ['#cellBars','#pageTable tbody','#tabGroups','#sysCards'].forEach(sel=>{const el=doc.querySelector(sel);if(el)el.innerHTML='';});
+    doc.querySelectorAll('.statusTiles,.sysStatus').forEach(el=>el.innerHTML='');
+    const eb=doc.querySelector('#editBtn');eb.textContent='✎ Edit table';eb.classList.remove('on');
+    doc.querySelector('#addBtn').hidden=true;doc.querySelector('#editHint').hidden=true;doc.querySelector('#saveWarn').hidden=true;
+    doc.querySelector('#pageTable').classList.remove('editing');
+    const html='<!DOCTYPE html>\n'+doc.outerHTML;
+    const json=JSON.stringify(E).replace(/</g,'\\u003c');
+    const out=html.replace(/(<script type="application\/json" id="pageData">)[\s\S]*?(<\/script>)/,(m,a,b)=>a+json+b);
+    dl(new Blob([out],{type:'text/html'}),'Configurable_QC_MVP_Scope_Overview.html');});
+  function dl(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);}
+
+  stamp(); renderSummary(); renderTable();
+  $('#search').addEventListener('input',renderTable);
+  $('#statusSel').addEventListener('change',renderTable);
+  $$('#pageTable th[data-k]').forEach(th=>th.addEventListener('click',()=>{const k=th.dataset.k;sortDir=(sortK===k)?-sortDir:(k==='page'?1:-1);sortK=k;renderTable();}));
+})();
+</script>
+</body>
+</html>
